@@ -13,3 +13,17 @@ Important note: If you want to use the datasets launch files as is, add a symlin
 To obtain efficient communication between the robots, we suggest using the [zenoh-dds-ros2-bridge](https://github.com/eclipse-zenoh/zenoh-plugin-ros2dds). Follow their installation instructions. Assuming that Zenoh is installed correctly, you need to run it on each robot as in this [launch file](launch/robot_experiments/experiment_lidar.launch.py).
 
 You can also use the `zenoh-dds-bridge` as in this [launch file](launch/robot_experiments/experiment_ouster_realsense.launch.py), but this will be soon deprecated by Zenoh.
+
+## Start-up instructions 
+
+Refer docker/makefile for make command usage.
+
+```
+git clone https://github.com/AtharvaJam/cslam_experiments.git
+cd cslam_experiments/docker
+make build
+make gpu_run 
+# or make cpu_run (for CPU) 
+# or make agx_run (for Edge NVIDIA)
+make swarmslam-lidar
+```

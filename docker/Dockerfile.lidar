@@ -11,7 +11,7 @@ RUN git clone https://github.com/MISTLab/Swarm-SLAM.git &&\
     vcs import src < cslam.repos
 
 RUN cd Swarm-SLAM &&\
-    pip install --break-system-packages -r requirements.txt
+    pip install --break-system-packages --ignore-installed psutil "numpy<2" -r requirements.txt
 
 RUN cd Swarm-SLAM &&\
     rosdep update &&\
@@ -21,14 +21,10 @@ RUN cd Swarm-SLAM &&\
     . /opt/ros/$ROS_DISTRO/setup.sh &&\
     colcon build
 
-RUN git clone https://github.com/MIT-SPARK/TEASER-plusplus.git &&\
+RUN apt-get install -y cmake libeigen3-dev libboost-all-dev &&\
+    git clone https://github.com/MIT-SPARK/TEASER-plusplus.git &&\
     cd TEASER-plusplus &&\
-    mkdir build &&\
-    cd build &&\
-    cmake -DTEASERPP_PYTHON_VERSION=3.10 .. &&\
-    make teaserpp_python &&\
-    cd python &&\
-    pip install --break-system-packages .
+    pip install --break-system-packages --ignore-installed psutil .
 
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
 RUN echo "source Swarm-SLAM/install/setup.bash" >> ~/.bashrc
@@ -49,8 +45,8 @@ RUN cd Swarm-SLAM &&\
     colcon build
 
 # Install Zenoh in one of the following ways
-## From deb packages
-# RUN echo "deb [trusted=yes] https://download.eclipse.org/zenoh/debian-repo/ /" | tee -a /etc/apt/sources.list > /dev/null
-# RUN apt-get update && apt-get install zenoh-bridge-ros2dds
-## Directly from binary file
+# From deb packages
+RUN echo "deb [trusted=yes] https://download.eclipse.org/zenoh/debian-repo/ /" | tee -a /etc/apt/sources.list > /dev/null
+RUN apt-get update && apt-get install zenoh-bridge-ros2dds
+# # Directly from binary file
 # COPY zenoh-bridge-ros2dds /usr/bin/zenoh-bridge-ros2dds
